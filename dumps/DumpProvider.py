@@ -43,8 +43,11 @@ class DumpProvider:
       for fileName in files:
         if fnmatch.fnmatch(fileName, 'dump-' + dbName  + '*.sql.gz'):
           if (index > self.maxDumpsPerDatabase - 1):
-            os.remove(self.dbAdapter.dumpDirectory + fileName)
-            print 'Remove dump file: ', self.dbAdapter.dumpDirectory + fileName
+            try:
+              os.remove(self.dbAdapter.dumpDirectory + fileName)
+              print 'Remove dump file: ', self.dbAdapter.dumpDirectory + fileName
+            except OSError:
+              print 'Cannot remove file ', self.dbAdapter.dumpDirectory + fileName
           index = index + 1
   
   def run(self, stampNameStrategy):
