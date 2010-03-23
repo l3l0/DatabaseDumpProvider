@@ -1,4 +1,4 @@
-import commands, string
+import commands, string, re
 
 class Adapter:
   def __init__(self):
@@ -26,7 +26,11 @@ class Adapter:
   def __prepareDatabasesList(self):
     if ([] == self.dbList):
       self.dbList = string.split(commands.getoutput(self.getDatabasesListCmd()), "\n");
-  
+      pattern = re.compile(r"^[A-Za-z]{1}[A-Za-z0-9_\-]+$")
+      for dbName in self.dbList:
+        if (None == pattern.match(dbName)):
+          self.dbList.remove(dbName)
+ 
   def dump(self, dbName, nameStrategyFunction):
     raise TypeError("Cannot call abstract method")
 
